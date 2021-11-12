@@ -1,9 +1,17 @@
 import csv
 
-num_dict = {}
-with open("RussianNumerals .csv", "r") as fin:
-    reader = csv.reader(fin)
-    for row in reader:
-        num_dict[row[0]] = {"card": row[1], "ord": row[2]}
+def create_dict(csv_file:str, option:str)->dict:
+    the_dict = {}
+    with open(csv_file, "r") as fin:
+        reader = csv.reader(fin)
+        if option == "numerals":
+            for row in reader:
+                the_dict[row[0]] = {"card": row[1], "ord": row[2]}
 
-print(num_dict)
+        if option == "months":
+            for row in reader:
+                the_dict[row[0]] = row[1]
+    return the_dict
+
+num_dict = create_dict("RussianNumerals.csv", "numerals")
+month_dict = create_dict("RussianMonths.csv", "months")
