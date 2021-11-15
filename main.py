@@ -2,10 +2,18 @@ from regexes import *
 
 ERROR = "~~~ INVALID INPUT. PLEASE TRY AGAIN ~~~"
 
-def get_input(optional_text=""):
-    return input(optional_text).strip().lower()
+def get_input()->str:
+    """
+    receives user input and adds visual >>>
+    :return: user input
+    """
+    return input(">>>").strip().lower()
 
 def get_selection()->str:
+    """
+    prompts user for input format selection
+    :return selection: user selection
+    """
     print("""
   _____               _               _____        _          _____                           _             
  |  __ \             (_)             |  __ \      | |        / ____|                         | |            
@@ -21,33 +29,49 @@ Select your date input format:
 |1| Russian numeric
 |2| Russian Cyrillic
 |3| English long form""")
-        selection = get_input(">>>")
+        selection = get_input()
         if selection in ["1", "2", "3", "russian numeric", "russian cyrillic", "english long form"]:
             return selection
         else:
             print(ERROR)
 
-def validate_selection(is_valid=True):
+def validate_date(date:list)->bool:
+    """
+    validates day and month with three checks:
+         1. months that end on the 30th
+         2. feb 28th edgecase
+         3. general date checks (month <= 12, day <= 31)
+    :param date:
+    :return:
+    """
+    day,month = date[0], date[1]
+    month_exceptions = ["04", "06", "09", "11"]
 
-    # input validation differs depending on which option the user chose
-    # possibly split this function into seperate ones in the future
+    if month in month_exceptions and int(day) > 30 or \
+                   month == "02" and int(day) > 28 or \
+                   int(month) > 12 or int(day) > 31:
+        return False
+    else:
+        return True
 
-    selection = get_selection()
+# input validation differs depending on which option the user chose
+# probably split this function into seperate ones in the future
+
+def process_selection(selection:str)->list:
+    """wont add dicstrings yet since function will probably be split up"""
     if selection in ["1", "russian numeric"]:
         while True:
-            print("Please enter a Russian date in dd.mm.yyyy")
-            user_input = get_input(">>>")
+            print("Please enter a Russian date in dd.mm.yyyy format.")
+            user_input = get_input()
 
-            if user_input == "b": break # testing
-
-            # only checks formatting
-            # still need to check for valid date numbers
-            search = re.search(r"(\d\d)\.(\d\d)\.(\d\d\d\d)", user_input)
-            if not search:
+            if not re.search(r"(\d\d)\.(\d\d)\.(\d\d\d\d)", user_input):
                 print(ERROR)
             else:
-                return user_input
-
+                split_date = user_input.split(".")
+                if not validate_date(split_date):
+                    print(ERROR)
+                else:
+                    return split_date
 
 
     if selection in ["2", "russian cyrillic"]:
@@ -58,14 +82,11 @@ def validate_selection(is_valid=True):
 
 
 
-
-
-
-
 def main():
-    validate_selection()
+    selection = get_selection()
+    date_list = process_selection(selection)
     # regexes will apply here
-    pass
+
 
 
 
