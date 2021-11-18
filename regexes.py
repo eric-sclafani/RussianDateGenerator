@@ -23,3 +23,31 @@ def daynumeral_to_cyrillic(day:str)->str:
 
     day = re.sub(rf"{day}", num_dict[day]["ord"], day)
     return day
+
+def decline_day(day:str) -> str:
+    """
+    declines Russian day from nominitive -> prepositional case
+    :param day: last number in date string to be declined
+    :return day: day in prepositional case
+    """
+    if re.search(r"третий$", day):
+        day = re.sub(r"третий$", "третье", day)
+    elif re.search(r"ый$", day):
+        day = re.sub(r"ый$", "ое", day)
+    elif re.search(r"ой$", day):
+        day = re.sub(r"ой$", "ое", day)
+    return day
+    
+def decline_year(year: str) -> str:
+    """
+    declines Russian year from nominitive -> genitive case
+    :param year: last number in year string to be declined
+    :return year: year in genitive case
+    """
+    if re.search(r"третий", year):
+        year = re.sub(r"третий$", "третьего", year)
+    elif re.search(r"ый$", year):
+        year = re.sub(r"ый$", "ого", year)
+    elif re.search(r"ой$", year):
+        year = re.sub(r"ой$", "ого", year)
+    return year
