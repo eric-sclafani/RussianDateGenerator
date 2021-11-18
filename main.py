@@ -71,6 +71,7 @@ def process_selection(selection:str)->list:
                 if not validate_date(split_date):
                     print(ERROR)
                 else:
+                    print(split_date)
                     return split_date
 
 

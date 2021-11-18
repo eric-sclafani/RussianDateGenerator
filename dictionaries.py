@@ -6,7 +6,7 @@ def create_dict(csv_file:str, option:str)->dict:
         reader = csv.reader(fin)
         if option == "numerals":
             for row in reader:
-                the_dict[row[0]] = {"card": row[1], "ord": row[2]}
+                the_dict[row[0]] = {"card": str(row[1]), "ord": str(row[2])}
 
         if option == "months":
             for row in reader:
