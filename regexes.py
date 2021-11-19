@@ -58,4 +58,23 @@ def transliterate_cyr(cyrillic):
     :param cyrillic: changes cyrillic letters to roman equivalents
     :return translit_rus: translitered russian form of string
     """
-    
+    if re.search(r"А", cyrillic):
+        translit_rus=re.sub(r"А", "A", cyrillic)
+    if re.search(r"а", cyrillic):
+        translit_rus=re.sub(r"а", "a", cyrillic)
+    if re.search(r"Б", cyrillic):
+        translit_rus=re.sub(r"Б", "B", cyrillic)
+    if re.search(r"б", cyrillic):
+        translit_rus=re.sub(r"б", "b", cyrillic)
+    if re.search(r"В", cyrillic):
+        translit_rus=re.sub(r"В", "V", cyrillic)
+    if re.search(r"в", cyrillic):
+        translit_rus=re.sub(r"в", "v", cyrillic)
+    if re.search(r"Г", cyrillic):
+        translit_rus=re.sub(r"Г", "G", cyrillic)
+    if re.search(r"г", cyrillic):
+        translit_rus=re.sub(r"г", "g", cyrillic)
+    if re.search(r"Д", cyrillic):
+        translit_rus=re,sub(r"Д", "D", cyrillic)
+        
+    return translit_rus
