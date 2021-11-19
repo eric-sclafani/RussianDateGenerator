@@ -1,28 +1,22 @@
 from dictionaries import *
 import re
 
-def decline_month(month:str) -> str:
-    """
-    declines Russian month from nomitive -> genitive case
-    :param month: month to be declined
-    :return month: month in genitive case
-    """
-    if re.search(r"ь$", month):
-        month = re.sub(r"ь$", "я", month)
-    elif re.search(r"й$", month):
-        month = re.sub(r"й$", "я", month)
-    elif re.search(r"т$", month):
-        month = re.sub(r"т$", "та", month)
-    return month
-
-def daynumeral_to_cyrillic(day:str)->str:
+def numeral_to_cyrillic(numeral:str, option)->str:
 
     single_nums = ["01", "02", "03", "04", "05", "06", "07", "08", "09"]
-    if day in single_nums:
-        day = re.sub(r"0", "", day)
+    if numeral in single_nums:
+        numeral = re.sub(r"0", "", numeral)
 
-    day = re.sub(rf"{day}", num_dict[day]["ord"], day)
-    return day
+    # day processing
+    if option == "day":
+        return re.sub(rf"{numeral}", num_dict[numeral]["ord"], numeral)
+
+    # month processing
+    if option == "month":
+        return re.sub(rf"{numeral}", month_dict[numeral], numeral)
+
+    # year processing
+    # to be added
 
 def decline_day(day:str) -> str:
     """
@@ -30,6 +24,7 @@ def decline_day(day:str) -> str:
     :param day: last number in date string to be declined
     :return day: day in prepositional case
     """
+    day = numeral_to_cyrillic(day, "day")
     if re.search(r"третий$", day):
         day = re.sub(r"третий$", "третье", day)
     elif re.search(r"ый$", day):
@@ -37,6 +32,21 @@ def decline_day(day:str) -> str:
     elif re.search(r"ой$", day):
         day = re.sub(r"ой$", "ое", day)
     return day
+
+def decline_month(month:str) -> str:
+    """
+    declines Russian month from nomitive -> genitive case
+    :param month: month to be declined
+    :return month: month in genitive case
+    """
+    month = numeral_to_cyrillic(month, "month")
+    if re.search(r"ь$", month):
+        month = re.sub(r"ь$", "я", month)
+    elif re.search(r"й$", month):
+        month = re.sub(r"й$", "я", month)
+    elif re.search(r"т$", month):
+        month = re.sub(r"т$", "та", month)
+    return month
     
 def decline_year(year: str) -> str:
     """

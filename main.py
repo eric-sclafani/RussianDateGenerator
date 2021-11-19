@@ -1,4 +1,6 @@
+from ascii_arts import *
 from regexes import *
+import random
 
 ERROR = "~~~ INVALID INPUT. PLEASE TRY AGAIN ~~~"
 
@@ -14,14 +16,8 @@ def get_selection()->str:
     prompts user for input format selection
     :return selection: user selection
     """
-    print("""
-  _____               _               _____        _          _____                           _             
- |  __ \             (_)             |  __ \      | |        / ____|                         | |            
- | |__) |   _ ___ ___ _  __ _ _ __   | |  | | __ _| |_ ___  | |  __  ___ _ __   ___ _ __ __ _| |_ ___  _ __ 
- |  _  / | | / __/ __| |/ _` | '_ \  | |  | |/ _` | __/ _ \ | | |_ |/ _ \ '_ \ / _ \ '__/ _` | __/ _ \| '__|
- | | \ \ |_| \__ \__ \ | (_| | | | | | |__| | (_| | ||  __/ | |__| |  __/ | | |  __/ | | (_| | || (_) | |   
- |_|  \_\__,_|___/___/_|\__,_|_| |_| |_____/ \__,_|\__\___|  \_____|\___|_| |_|\___|_|  \__,_|\__\___/|_|   
-""")
+    choices = [art1, art2, art3]
+    print(random.choice(choices))
     while True:
         print("""~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Select your date input format:
@@ -56,30 +52,9 @@ def validate_date(date:list)->bool:
 
 # input validation differs depending on which option the user chose
 # probably split this function into seperate ones in the future
-# Here is another ASCII Art for Header:
-#print("""
-#   ___               _             ___       __        _____                      __          
-#  / _ \__ _____ ___ (_)__ ____    / _ \___ _/ /____   / ___/__ ___  ___ _______ _/ /____  ____
-# / , _/ // (_-<(_-</ / _ `/ _ \  / // / _ `/ __/ -_) / (_ / -_) _ \/ -_) __/ _ `/ __/ _ \/ __/
-#/_/|_|\_,_/___/___/_/\_,_/_//_/ /____/\_,_/\__/\__/  \___/\__/_//_/\__/_/  \_,_/\__/\___/_/   
-#
-#""")                                                                                         
-#print("""
-#                                                                                                    
-#  ,_        ,    ,    . __,   ,__,      __/  __,  -/- _      __   _   ,__,   _   ,_  __,  -/- _,_ ,_ 
-#_/ (__(_/__/_)__/_)__/_(_/(__/ / (_   _(_/(_(_/(__/__(/_   _(_/__(/__/ / (__(/__/ (_(_/(__/__(_/_/ (_
-#                                                            _/_                                      
-#                                                           (/                                        
-#""")                                                                                               
-#print("""
-# ___ _  _   __   __  _  __  __  _   __   __ _____ ___    __ ___ __  _ ___ ___  __ _____ __  ___  
-#| _ \ || |/' _//' _/| |/  \|  \| | | _\ /  \_   _| __|  / _] __|  \| | __| _ \/  \_   _/__\| _ \ 
-#| v / \/ |`._`.`._`.| | /\ | | ' | | v | /\ || | | _|  | [/\ _|| | ' | _|| v / /\ || || \/ | v / 
-#|_|_\\__/ |___/|___/|_|_||_|_|\__| |__/|_||_||_| |___|  \__/___|_|\__|___|_|_\_||_||_| \__/|_|_\
-#
-#""")
+
 def process_selection(selection:str)->list:
-    """wont add dicstrings yet since function will probably be split up"""
+    """wont add docstrings yet since function will probably be split up"""
     if selection in ["1", "russian numeric"]:
         while True:
             print("Please enter a Russian date in dd.mm.yyyy format.")
@@ -92,9 +67,7 @@ def process_selection(selection:str)->list:
                 if not validate_date(split_date):
                     print(ERROR)
                 else:
-                    print(split_date)
                     return split_date
-
 
     if selection in ["2", "russian cyrillic"]:
         raise NotImplementedError("Woops! Feature not implemented yet. Check back later!")
@@ -103,11 +76,21 @@ def process_selection(selection:str)->list:
         raise NotImplementedError("Woops! Feature not implemented yet. Check back later!")
 
 
-
 def main():
     selection = get_selection()
     date_list = process_selection(selection)
-    # regexes will apply here
+
+    print(date_list)
+    day = decline_day(date_list[0])
+    month = decline_month(date_list[1])
+    year = decline_year(date_list[2])
+
+    # testing
+    print(f"""
+
+DAY: {day}
+MONTH: {month}
+YEAR: {year}""")
 
 
 
