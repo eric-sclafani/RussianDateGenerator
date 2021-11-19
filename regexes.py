@@ -51,3 +51,11 @@ def decline_year(year: str) -> str:
     elif re.search(r"ой$", year):
         year = re.sub(r"ой$", "ого", year)
     return year
+
+def transliterate_cyr(cyrillic):
+    """
+    this takes the Russian cyrillic and transliterates it into the Roman alphabet
+    :param cyrillic: changes cyrillic letters to roman equivalents
+    :return translit_rus: translitered russian form of string
+    """
+    
