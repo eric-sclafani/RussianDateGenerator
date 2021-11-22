@@ -204,14 +204,13 @@ def transliterate_cyr(translit):
         translit=re.sub(r"я", "ya", translit)
     return translit
 
-def julian_cal(numeral:str) -> str:
+def julian_cal(datelist):
     """
     takes a string of numerals in the gregorian calendar and outputs julian equivalent
     """
-    greg=numeral.split(".")
-    day=greg[0]
-    month=greg[1]
-    year=greg[-1]
+    day=datelist[0]
+    month=datelist[1]
+    year=datelist[-1]
     juld=int(day)+13
     month31=["01", "03", "05", "07", "08", "10"]
     month30=["09", "04", "06", "11"]
