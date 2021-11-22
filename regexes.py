@@ -211,22 +211,44 @@ def julian_cal(numeral:str) -> str:
     day=greg[0]
     month=greg[1]
     year=greg[-1]
-    juld=float(day)+13
+    juld=int(day)+13
     month31=["01", "03", "05", "07", "08", "10"]
+    month30=["09", "04", "06", "11"]
     if month=="02":
-        if float(juld)>28:
-            monthj=float(month)+1
-            dayj=juld-float(day)
+        if int(juld)>29:
+            monthj=int(month)+1
+            dayj=13-(29-int(day))
+            yearj=year
         else:
             monthj=month
             dayj=juld
+            yearj=year
     elif month=="12":
-        if float(juld)>32:
+        if int(juld)>31:
             monthj="01"
-            yearj=float(year)+1
-            dayj=juld-float(day)
+            yearj=int(year)+1
+            dayj=13-(31-int(day))
         else:
             monthj=month
             yearj=year
             dayj=juld
+    elif month in month31:
+        if int(juld)>31:
+            monthj=int(month)+1
+            dayj=13-(31-int(day))
+            yearj=year
+        else:
+            monthj=month
+            dayj=juld
+            yearj=year
+    elif month in month30:
+        if int(juld)>30:
+            monthj=int(month)+1
+            dayj=13-(30-int(day))
+            year=year
+        else:
+            monthj=month
+            dayj=juld
+            yearj=year
+    julian=str(dayj)+"."+str(monthj)+"."+str(yearj)
     return julian
