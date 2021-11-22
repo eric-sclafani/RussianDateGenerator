@@ -202,3 +202,23 @@ def transliterate_cyr(translit):
         if re.search(r"я", translit):
             translit=re.sub(r"я", "ya", translit)
     return translit
+
+def julian_cal(numeral:str) -> str:
+    """
+    takes a string of numerals in the gregorian calendar and outputs julian equivalent
+    """
+    greg=numeral.split(".")
+    day=greg[0]
+    month=greg[1]
+    year=greg[-1]
+    dayj=float(day)+13
+    if month=="02":
+        if dayj>28:
+            monthj=float(month)+1
+            dayj=dayj-float(day)
+        else:
+            monthj=month
+            dayj=dayj
+    elif 
+        
+    return julian
