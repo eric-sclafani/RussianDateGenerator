@@ -60,6 +60,8 @@ def decline_year(year: str) -> str:
         year = re.sub(r"ый$", "ого", year)
     elif re.search(r"ой$", year):
         year = re.sub(r"ой$", "ого", year)
+    elif re.search(r"год$", year);
+        year= re.sub(r"год$", "года", year)
     return year
 
 def transliterate_cyr(translit):
