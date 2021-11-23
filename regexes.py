@@ -1,23 +1,6 @@
 from dictionaries import *
 import re
 
-def numeral_to_cyrillic(numeral:str, option)->str:
-
-    single_nums = ["01", "02", "03", "04", "05", "06", "07", "08", "09"]
-    if numeral in single_nums:
-        numeral = re.sub(r"0", "", numeral)
-
-    # day processing
-    if option == "day":
-        return re.sub(rf"{numeral}", num_dict[numeral]["ord"], numeral)
-
-    # month processing
-    if option == "month":
-        return re.sub(rf"{numeral}", month_dict[numeral], numeral)
-
-    # year processing
-    # to be added
-
 def decline_day(day:str) -> str:
     """
     declines Russian day from nominitive -> prepositional case
@@ -47,13 +30,14 @@ def decline_month(month:str) -> str:
     elif re.search(r"т$", month):
         month = re.sub(r"т$", "та", month)
     return month
-    
+
 def decline_year(year: str) -> str:
     """
     declines Russian year from nominitive -> genitive case
     :param year: last number in year string to be declined
     :return year: year in genitive case
     """
+    year = numeral_to_cyrillic(year, "year")
     if re.search(r"третий", year):
         year = re.sub(r"третий$", "третьего", year)
     elif re.search(r"ый$", year):
@@ -64,11 +48,54 @@ def decline_year(year: str) -> str:
         year= re.sub(r"год$", "года", year)
     return year
 
-def transliterate_cyr(translit):
+def parse_year(year:str)->list:
     """
-    this takes the Russian cyrillic and transliterates it into the Roman alphabet
-    :param cyrillic: changes cyrillic letters to roman equivalents
-    :return translit_rus: translitered russian form of string
+    takes a year as input and returns a list of year components
+    :param year: string to be parsed
+    :return: ordinal form of year if its a number followed by three zeros otherwise list of components
+    """
+    # if year is a number followed by three zeros (ex:1000, 2000,etc...), convert to cardinal form
+    if re.search(r"\d000", year):
+        return num_dict[year]["ord"]
+
+    # break up the year into its components
+    components = [year[0] + "000", year[1] + "00", year[2] + "0", year[3]] # ex: 2000 + 300 + 20 + 1 = 2321
+
+    # filter out 0 numbers created by the above list to avoid key errors
+    return [component for component in components if component not in ["000", "00", "0"]]
+
+def numeral_to_cyrillic(numeral: str, option) -> str:
+    single_nums = ["01", "02", "03", "04", "05", "06", "07", "08", "09"]
+    if numeral in single_nums:
+        numeral = re.sub(r"0", "", numeral)
+
+    # day processing
+    if option == "day":
+        return re.sub(rf"{numeral}", num_dict[numeral]["ord"], numeral)
+
+    # month processing
+    if option == "month":
+        return re.sub(rf"{numeral}", month_dict[numeral], numeral)
+
+    # year processing
+    if option == "year":
+        year = ""
+        for component in parse_year(numeral):
+
+            # if year is numeral followed by three zeros (already processed in parse_year)
+            if not component.isnumeric():
+                return parse_year(numeral)
+            if len(component) == 1:
+                year += num_dict[component]["ord"] + " "
+            else:
+                year += num_dict[component]["card"] + " "
+        return year
+
+def transliterate_cyr(translit:str)->str:
+    """
+    takes the Russian cyrillic as input and transliterates it into the Roman alphabet
+    :param translit: changes cyrillic letters to roman equivalents
+    :return translit: translitered russian form of string
     """
     if re.search(r"А", translit):
         translit=re.sub(r"А", "A", translit)
@@ -271,7 +298,7 @@ def julian_cal(datelist):
         if int(juld)>30:
             monthj=int(month)+1
             dayj=13-(30-int(day))
-            year=year
+            yearj=year
         else:
             monthj=month
             dayj=juld

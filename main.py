@@ -6,7 +6,7 @@ ERROR = "~~~ INVALID INPUT. PLEASE TRY AGAIN ~~~"
 
 def get_input()->str:
     """
-    receives user input and adds visual >>>
+    retrieves user input and adds visual >>>
     :return: user input
     """
     return input(">>>").strip().lower()
@@ -37,12 +37,13 @@ def validate_date(date:list)->bool:
          1. months that end on the 30th
          2. feb 28th edgecase
          3. general date checks (month <= 12, day <= 31)
-    :param date:
-    :return:
+    :param date: date to be evaluated
+    :return: True if date is valid False otherwise
     """
-    day,month = date[0], date[1]
+    day,month,year = date[0], date[1], date[2]
     month_exceptions = ["04", "06", "09", "11"]
-
+    if len(year) != 4:
+        return False
     if month in month_exceptions and int(day) > 30 or \
                    month == "02" and int(day) > 28 or \
                    int(month) > 12 or int(day) > 31:
@@ -81,16 +82,17 @@ def main():
     date_list = process_selection(selection)
 
     print(date_list)
+
     day = decline_day(date_list[0])
     month = decline_month(date_list[1])
     year = decline_year(date_list[2])
 
-    # testing
     print(f"""
-
 DAY: {day}
 MONTH: {month}
-YEAR: {year}""")
+YEAR: {year}
+
+TRANSLITERATION: {transliterate_cyr(day + " " + month + " " + year)}""")
 
 
 
