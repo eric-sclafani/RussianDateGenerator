@@ -65,6 +65,12 @@ def parse_year(year:str)->list:
     return [component for component in components if component not in ["000", "00", "0"]]
 
 def numeral_to_cyrillic(numeral: str, option) -> str:
+    """
+    converts russian numeral form into cyrillic
+    :param numeral: numeral to be converted
+    :param option: which conversion to apply (day, month, or year)
+    :return: cyrillic form of the numeral form
+    """
     single_nums = ["01", "02", "03", "04", "05", "06", "07", "08", "09"]
     if numeral in single_nums:
         numeral = re.sub(r"0", "", numeral)
@@ -85,6 +91,9 @@ def numeral_to_cyrillic(numeral: str, option) -> str:
             # if year is numeral followed by three zeros (already processed in parse_year)
             if not component.isnumeric():
                 return parse_year(numeral)
+
+            # concatenate all day month and year cyrillic forms
+            # if last number > 0, has to be on the ordinal form.
             if len(component) == 1:
                 year += num_dict[component]["ord"] + " "
             else:
