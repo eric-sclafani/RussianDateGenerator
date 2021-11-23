@@ -55,11 +55,14 @@ def parse_year(year:str)->list:
     :return: ordinal form of year if its a number followed by three zeros otherwise list of components
     """
     # if year is a number followed by three zeros (ex:1000, 2000,etc...), convert to cardinal form
-    if re.search(r"\d000", year):
+    if re.search(r"\d000?", year):
         return num_dict[year]["ord"]
 
     # break up the year into its components
-    components = [year[0] + "000", year[1] + "00", year[2] + "0", year[3]] # ex: 2000 + 300 + 20 + 1 = 2321
+    if len(year) == 4:
+        components = [year[0] + "000", year[1] + "00", year[2] + "0", year[3]]
+    else:
+        components = [year[0] + "00", year[1] + "0", year[2]]
 
     # filter out 0 numbers created by the above list to avoid key errors
     return [component for component in components if component not in ["000", "00", "0"]]
@@ -93,7 +96,7 @@ def numeral_to_cyrillic(numeral: str, option) -> str:
                 return parse_year(numeral)
 
             # concatenate all day month and year cyrillic forms
-            # if last number > 0, has to be on the ordinal form.
+            # if last number > 0, has to be in the ordinal form.
             if len(component) == 1:
                 year += num_dict[component]["ord"] + " "
             else:

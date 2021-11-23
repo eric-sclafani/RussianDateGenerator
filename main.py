@@ -42,7 +42,7 @@ def validate_date(date:list)->bool:
     """
     day,month,year = date[0], date[1], date[2]
     month_exceptions = ["04", "06", "09", "11"]
-    if len(year) != 4:
+    if len(year) not in [3,4]:
         return False
     if month in month_exceptions and int(day) > 30 or \
                    month == "02" and int(day) > 28 or \
@@ -61,7 +61,7 @@ def process_selection(selection:str)->list:
             print("Please enter a Russian date in dd.mm.yyyy format.")
             user_input = get_input()
 
-            if not re.search(r"(\d\d)\.(\d\d)\.(\d\d\d\d)", user_input):
+            if not re.search(r"(\d\d)\.(\d\d)\.(\d\d\d)", user_input):
                 print(ERROR)
             else:
                 split_date = user_input.split(".")
