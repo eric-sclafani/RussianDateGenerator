@@ -101,7 +101,7 @@ def numeral_to_cyrillic(numeral: str, option) -> str:
                 year += num_dict[component]["ord"] + " "
             else:
                 year += num_dict[component]["card"] + " "
-        return year
+        return year + " "+ "год"
 
 def transliterate_cyr(translit:str)->str:
     """
