@@ -81,8 +81,6 @@ def main():
     selection = get_selection()
     date_list = process_selection(selection)
 
-    print(date_list)
-
     day = decline_day(date_list[0])
     month = decline_month(date_list[1])
     year = decline_year(date_list[2])
