@@ -1,6 +1,23 @@
 from dictionaries import *
 import re
 
+def numeral_to_cyrillic(numeral:str, option)->str:
+
+    single_nums = ["01", "02", "03", "04", "05", "06", "07", "08", "09"]
+    if numeral in single_nums:
+        numeral = re.sub(r"0", "", numeral)
+
+    # day processing
+    if option == "day":
+        return re.sub(rf"{numeral}", num_dict[numeral]["ord"], numeral)
+
+    # month processing
+    if option == "month":
+        return re.sub(rf"{numeral}", month_dict[numeral], numeral)
+
+    # year processing
+    # to be added
+
 def decline_day(day:str) -> str:
     """
     declines Russian day from nominitive -> prepositional case
@@ -30,14 +47,13 @@ def decline_month(month:str) -> str:
     elif re.search(r"т$", month):
         month = re.sub(r"т$", "та", month)
     return month
-
+    
 def decline_year(year: str) -> str:
     """
     declines Russian year from nominitive -> genitive case
     :param year: last number in year string to be declined
     :return year: year in genitive case
     """
-    year = numeral_to_cyrillic(year, "year")
     if re.search(r"третий", year):
         year = re.sub(r"третий$", "третьего", year)
     elif re.search(r"ый$", year):
@@ -48,66 +64,11 @@ def decline_year(year: str) -> str:
         year= re.sub(r"год$", "года", year)
     return year
 
-def parse_year(year:str)->list:
+def transliterate_cyr(translit):
     """
-    takes a year as input and returns a list of year components
-    :param year: string to be parsed
-    :return: ordinal form of year if its a number followed by three zeros otherwise list of components
-    """
-    # if year is a number followed by three zeros (ex:1000, 2000,etc...), convert to cardinal form
-    if re.search(r"\d000?", year):
-        return num_dict[year]["ord"]
-
-    # break up the year into its components
-    if len(year) == 4:
-        components = [year[0] + "000", year[1] + "00", year[2] + "0", year[3]]
-    else:
-        components = [year[0] + "00", year[1] + "0", year[2]]
-
-    # filter out 0 numbers created by the above list to avoid key errors
-    return [component for component in components if component not in ["000", "00", "0"]]
-
-def numeral_to_cyrillic(numeral: str, option) -> str:
-    """
-    converts russian numeral form into cyrillic
-    :param numeral: numeral to be converted
-    :param option: which conversion to apply (day, month, or year)
-    :return: cyrillic form of the numeral form
-    """
-    single_nums = ["01", "02", "03", "04", "05", "06", "07", "08", "09"]
-    if numeral in single_nums:
-        numeral = re.sub(r"0", "", numeral)
-
-    # day processing
-    if option == "day":
-        return re.sub(rf"{numeral}", num_dict[numeral]["ord"], numeral)
-
-    # month processing
-    if option == "month":
-        return re.sub(rf"{numeral}", month_dict[numeral], numeral)
-
-    # year processing
-    if option == "year":
-        year = ""
-        for component in parse_year(numeral):
-
-            # if year is numeral followed by three zeros (already processed in parse_year)
-            if not component.isnumeric():
-                return parse_year(numeral)
-
-            # concatenate all day month and year cyrillic forms
-            # if last number > 0, has to be in the ordinal form.
-            if len(component) == 1:
-                year += num_dict[component]["ord"] + " "
-            else:
-                year += num_dict[component]["card"] + " "
-        return year + " "+ "год"
-
-def transliterate_cyr(translit:str)->str:
-    """
-    takes the Russian cyrillic as input and transliterates it into the Roman alphabet
-    :param translit: changes cyrillic letters to roman equivalents
-    :return translit: translitered russian form of string
+    this takes the Russian cyrillic and transliterates it into the Roman alphabet
+    :param cyrillic: changes cyrillic letters to roman equivalents
+    :return translit_rus: translitered russian form of string
     """
     if re.search(r"А", translit):
         translit=re.sub(r"А", "A", translit)
@@ -250,13 +211,64 @@ def julian_cal(datelist):
     day=datelist[0]
     month=datelist[1]
     year=datelist[-1]
-    juld=int(day)+13
     month31=["01", "03", "05", "07", "08", "10"]
     month30=["09", "04", "06", "11"]
     if month=="02":
-        if float(year)%4 ==0:
-            if re.search("00$", year):
-                if float(year)%400 ==0:
+        if float(year)>=2100:
+            juld=int(day)+14
+            if float(year)%4 ==0:
+                if re.search("00$", year):
+                    if float(year)%400 ==0:
+                        if int(juld)>29:
+                            monthj=int(month)+1
+                            dayj=14-(29-int(day))
+                            yearj=year
+                        else:
+                            monthj=month
+                            dayj=juld
+                            yearj=year
+                    else:
+                        if int(juld)>28:
+                            monthj=int(month)+1
+                            dayj=14-(28-int(day))
+                            yearj=year
+                else:
+                    if int(juld)>29:
+                        monthj=int(month)+1
+                        dayj=14-(29-int(day))
+                        yearj=year
+                    else:
+                        monthj=month
+                        dayj=juld
+                        yearj=year
+            else:
+                if int(juld)>28:
+                    monthj=int(month)+1
+                    dayj=14-(28-int(day))
+                    yearj=year
+                else:
+                    monthj=month
+                    dayj=juld
+                    yearj=year
+        else:
+            juld=int(day)+13
+            if float(year)%4 ==0:
+                if re.search("00$", year):
+                    if float(year)%400 ==0:
+                        if int(juld)>29:
+                            monthj=int(month)+1
+                            dayj=13-(29-int(day))
+                            yearj=year
+                        else:
+                            monthj=month
+                            dayj=juld
+                            yearj=year
+                    else:
+                        if int(juld)>28:
+                            monthj=int(month)+1
+                            dayj=13-(28-int(day))
+                            yearj=year
+                else:
                     if int(juld)>29:
                         monthj=int(month)+1
                         dayj=13-(29-int(day))
@@ -265,55 +277,77 @@ def julian_cal(datelist):
                         monthj=month
                         dayj=juld
                         yearj=year
-                else:
-                    if int(juld)>28:
-                        monthj=int(month)+1
-                        dayj=13-(28-int(day))
-                        yearj=year
             else:
-                if int(juld)>29:
+                if int(juld)>28:
                     monthj=int(month)+1
-                    dayj=13-(29-int(day))
+                    dayj=13-(28-int(day))
                     yearj=year
                 else:
                     monthj=month
                     dayj=juld
                     yearj=year
+    elif month=="12":
+        if float(year)>=2100:
+            juld=int(day)+14
+            if int(juld)>31:
+                monthj="01"
+                yearj=int(year)+1
+                dayj=14-(31-int(day))
+            else:
+                monthj=month
+                yearj=year
+                dayj=juld
         else:
-            if int(juld)>28:
+            juld=int(day)+13
+            if int(juld)>31:
+                monthj="01"
+                yearj=int(year)+1
+                dayj=13-(31-int(day))
+            else:
+                monthj=month
+                yearj=year
+                dayj=juld
+    elif month in month31:
+        if float(year)>=2100:
+            juld=int(day)+14
+            if int(juld)>31:
                 monthj=int(month)+1
-                dayj=13-(28-int(day))
+                dayj=14-(31-int(day))
                 yearj=year
             else:
                 monthj=month
                 dayj=juld
                 yearj=year
-    elif month=="12":
-        if int(juld)>31:
-            monthj="01"
-            yearj=int(year)+1
-            dayj=13-(31-int(day))
         else:
-            monthj=month
-            yearj=year
-            dayj=juld
-    elif month in month31:
-        if int(juld)>31:
-            monthj=int(month)+1
-            dayj=13-(31-int(day))
-            yearj=year
-        else:
-            monthj=month
-            dayj=juld
-            yearj=year
+            juld=int(day)+13
+            if int(juld)>31:
+                monthj=int(month)+1
+                dayj=13-(31-int(day))
+                yearj=year
+            else:
+                monthj=month
+                dayj=juld
+                yearj=year
     elif month in month30:
-        if int(juld)>30:
-            monthj=int(month)+1
-            dayj=13-(30-int(day))
-            yearj=year
+        if float(year)>=2100:
+            juld=int(day)+14
+            if int(juld)>30:
+                monthj=int(month)+1
+                dayj=14-(30-int(day))
+                yearj=year
+            else:
+                monthj=month
+                dayj=juld
+                yearj=year
         else:
-            monthj=month
-            dayj=juld
-            yearj=year
+            juld=int(day)+13
+            if int(juld)>30:
+                monthj=int(month)+1
+                dayj=13-(30-int(day))
+                yearj=year
+            else:
+                monthj=month
+                dayj=juld
+                yearj=year
     julian=str(dayj)+"."+str(monthj)+"."+str(yearj)
     return julian
