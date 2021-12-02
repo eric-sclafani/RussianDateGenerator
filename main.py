@@ -89,7 +89,6 @@ def main():
 DAY: {day}
 MONTH: {month}
 YEAR: {year}
-
 TRANSLITERATION: {transliterate_cyr(day + " " + month + " " + year)}""")
 
 

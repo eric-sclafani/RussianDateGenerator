@@ -1,8 +1,32 @@
 from dictionaries import *
 import re
 
-def numeral_to_cyrillic(numeral:str, option)->str:
 
+def parse_year(year: str) -> list:
+    """
+
+    :param year:
+    :return:
+    """
+    if re.search(r"\d000?", year):
+        return num_dict[year]["ord"]
+
+    # break up the year into its components
+    if len(year) == 4:
+        components = [year[0] + "000", year[1] + "00", year[2] + "0", year[3]]
+    else:
+        components = [year[0] + "00", year[1] + "0", year[2]]
+
+    # filter out 0 numbers created by the above list to avoid key errors
+    return [component for component in components if component not in ["000", "00", "0"]]
+
+def numeral_to_cyrillic(numeral:str, option)->str:
+    """
+
+    :param numeral:
+    :param option:
+    :return:
+    """
     single_nums = ["01", "02", "03", "04", "05", "06", "07", "08", "09"]
     if numeral in single_nums:
         numeral = re.sub(r"0", "", numeral)
@@ -16,7 +40,16 @@ def numeral_to_cyrillic(numeral:str, option)->str:
         return re.sub(rf"{numeral}", month_dict[numeral], numeral)
 
     # year processing
-    # to be added
+    if option == "year":
+        year = ""
+        for component in parse_year(numeral):
+            if not component.isnumeric():
+                return parse_year(numeral)
+            if len(component) == 1:
+                year += num_dict[component]["ord"] + " "
+            else:
+                year += num_dict[component]["card"] + " "
+        return year + " " + "год"
 
 def decline_day(day:str) -> str:
     """
@@ -54,6 +87,8 @@ def decline_year(year: str) -> str:
     :param year: last number in year string to be declined
     :return year: year in genitive case
     """
+
+    year = numeral_to_cyrillic(year, "year")
     if re.search(r"третий", year):
         year = re.sub(r"третий$", "третьего", year)
     elif re.search(r"ый$", year):
