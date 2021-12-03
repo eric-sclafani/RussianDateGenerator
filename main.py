@@ -31,6 +31,9 @@ Select your date input format:
         else:
             print(ERROR)
 
+# input validation differs depending on which option the user chose
+# probably split this function into seperate ones in the future
+
 def validate_date(date:list)->bool:
     """
     validates day and month with three checks:
@@ -44,15 +47,27 @@ def validate_date(date:list)->bool:
     month_exceptions = ["04", "06", "09", "11"]
     if len(year) not in [3,4]:
         return False
+
+    # checks to see if feb 29th is allowed (leap years)
+    if month == "02" and int(day) == 29:
+        if re.search(r"00$", year):
+            if float(year) % 400 == 0:
+                return True
+
+        if float(year) % 4 == 0:
+            return True
+    # CHECKS FOR:
+    #             - months ending on the 30th
+    #             - month > 12
+    #             - day > 31
+    #             - February date if not leap year
     if month in month_exceptions and int(day) > 30 or \
-                   month == "02" and int(day) > 28 or \
-                   int(month) > 12 or int(day) > 31:
+                   int(month) > 12 or int(day) > 31 or \
+                   int(month) == 2 and int(day) > 28:
         return False
+
     else:
         return True
-
-# input validation differs depending on which option the user chose
-# probably split this function into seperate ones in the future
 
 def process_selection(selection:str)->list:
     """wont add docstrings yet since function will probably be split up"""
