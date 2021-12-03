@@ -37,7 +37,7 @@ def numeral_to_cyrillic(numeral:str, option)->str:
 
     # month processing
     if option == "month":
-        return re.sub(rf"{numeral}", month_dict[numeral], numeral)
+        return re.sub(rf"{numeral}", month_dict[numeral]["cyr"], numeral)
 
     # year processing
     if option == "year":
