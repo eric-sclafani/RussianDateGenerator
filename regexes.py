@@ -49,7 +49,8 @@ def numeral_to_cyrillic(numeral:str, option)->str:
                 year += num_dict[component]["ord"] + " "
             else:
                 year += num_dict[component]["card"] + " "
-        return year + " " + "год"
+
+        return year.strip()
 
 def decline_day(day:str) -> str:
     """
@@ -58,12 +59,9 @@ def decline_day(day:str) -> str:
     :return day: day in prepositional case
     """
     day = numeral_to_cyrillic(day, "day")
-    if re.search(r"третий$", day):
-        day = re.sub(r"третий$", "третье", day)
-    elif re.search(r"ый$", day):
-        day = re.sub(r"ый$", "ое", day)
-    elif re.search(r"ой$", day):
-        day = re.sub(r"ой$", "ое", day)
+    day = re.sub(r"третий$", "третье", day)
+    day = re.sub(r"ый$", "ое", day)
+    day = re.sub(r"ой$", "ое", day)
     return day
 
 def decline_month(month:str) -> str:
@@ -73,12 +71,9 @@ def decline_month(month:str) -> str:
     :return month: month in genitive case
     """
     month = numeral_to_cyrillic(month, "month")
-    if re.search(r"ь$", month):
-        month = re.sub(r"ь$", "я", month)
-    elif re.search(r"й$", month):
-        month = re.sub(r"й$", "я", month)
-    elif re.search(r"т$", month):
-        month = re.sub(r"т$", "та", month)
+    month = re.sub(r"ь$", "я", month)
+    month = re.sub(r"й$", "я", month)
+    month = re.sub(r"т$", "та", month)
     return month
     
 def decline_year(year: str) -> str:
@@ -89,14 +84,13 @@ def decline_year(year: str) -> str:
     """
 
     year = numeral_to_cyrillic(year, "year")
-    if re.search(r"третий", year):
-        year = re.sub(r"третий$", "третьего", year)
-    elif re.search(r"ый$", year):
-        year = re.sub(r"ый$", "ого", year)
-    elif re.search(r"ой$", year):
-        year = re.sub(r"ой$", "ого", year)
-    elif re.search(r"год$", year):
-        year= re.sub(r"год$", "года", year)
+
+    year = re.sub(r"третий$", "третьего", year)
+    year = re.sub(r"ый$", "ого", year)
+    year = re.sub(r"ой$", "ого", year)
+
+    year = year + " год"
+    year= re.sub(r"год$", "года", year)
     return year
 
 def transliterate_cyr(translit):

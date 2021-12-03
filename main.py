@@ -9,7 +9,7 @@ def get_input()->str:
     retrieves user input and adds visual >>>
     :return: user input
     """
-    return input(">>>").strip().lower()
+    return input(">>>").strip()
 
 def get_selection()->str:
     """
