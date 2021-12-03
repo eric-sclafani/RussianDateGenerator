@@ -20,4 +20,4 @@ def create_dict(csv_file:str, option:str)->dict:
 
 num_dict = create_dict("RussianNumerals.csv", "numerals")
 month_dict = create_dict("RussianMonths.csv", "months")
-english_dict = create_dict("RussianNumerals.csv", "english")
+english_nums_dict = create_dict("RussianNumerals.csv", "english")

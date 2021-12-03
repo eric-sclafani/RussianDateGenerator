@@ -45,6 +45,8 @@ def validate_date(date:list)->bool:
     """
     day,month,year = date[0], date[1], date[2]
     month_exceptions = ["04", "06", "09", "11"]
+
+    # checks if year not length 3 or 4
     if len(year) not in [3,4]:
         return False
 
@@ -56,8 +58,8 @@ def validate_date(date:list)->bool:
 
         if float(year) % 4 == 0:
             return True
-    # CHECKS FOR:
-    #             - months ending on the 30th
+
+    # CHECKS FOR: - months ending on the 30th
     #             - month > 12
     #             - day > 31
     #             - February date if not leap year
@@ -90,7 +92,6 @@ def process_selection(selection:str)->list:
 
     if selection in ["3", "english long form"]:
         raise NotImplementedError("Woops! Feature not implemented yet. Check back later!")
-
 
 def main():
     selection = get_selection()
