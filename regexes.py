@@ -233,9 +233,158 @@ def transliterate_cyr(translit):
         translit=re.sub(r"я", "ya", translit)
     return translit
 
-def julian_cal(datelist):
+def gregorian_cal(datelist):
     """
     takes a string of numerals in the gregorian calendar and outputs julian equivalent
+    """
+    day=datelist[0]
+    month=datelist[1]
+    year=datelist[-1]
+    month31=["01", "03", "05", "07", "08", "10"]
+    month30=["09", "04", "06", "11"]
+    if month=="02":
+        if float(year)>=2100:
+            gregd=int(day)+14
+            if float(year)%4 ==0:
+                if re.search("00$", year):
+                    if float(year)%400 ==0:
+                        if int(gregd)>29:
+                            monthg=int(month)+1
+                            dayg=14-(29-int(day))
+                            yearg=year
+                        else:
+                            monthg=month
+                            dayg=gregd
+                            yearg=year
+                    else:
+                        if int(gregd)>28:
+                            monthg=int(month)+1
+                            dayg=14-(28-int(day))
+                            yearg=year
+                else:
+                    if int(gregd)>29:
+                        monthg=int(month)+1
+                        dayg=14-(29-int(day))
+                        yearg=year
+                    else:
+                        monthg=month
+                        dayg=gregd
+                        yearg=year
+            else:
+                if int(gregd)>28:
+                    monthg=int(month)+1
+                    dayg=14-(28-int(day))
+                    yearg=year
+                else:
+                    monthg=month
+                    dayg=gregd
+                    yearg=year
+        else:
+            gregd=int(day)+13
+            if float(year)%4 ==0:
+                if re.search("00$", year):
+                    if float(year)%400 ==0:
+                        if int(gregd)>29:
+                            monthg=int(month)+1
+                            dayg=13-(29-int(day))
+                            yearg=year
+                        else:
+                            monthg=month
+                            dayg=gregd
+                            yearg=year
+                    else:
+                        if int(gregd)>28:
+                            monthg=int(month)+1
+                            dayg=13-(28-int(day))
+                            yearg=year
+                else:
+                    if int(gregd)>29:
+                        monthg=int(month)+1
+                        dayg=13-(29-int(day))
+                        yearg=year
+                    else:
+                        monthg=month
+                        dayg=gregd
+                        yearg=year
+            else:
+                if int(gregd)>28:
+                    monthg=int(month)+1
+                    dayg=13-(28-int(day))
+                    yearg=year
+                else:
+                    monthg=month
+                    dayg=gregd
+                    yearg=year
+    elif month=="12":
+        if float(year)>=2100:
+            gregd=int(day)+14
+            if int(gregd)>31:
+                monthg="01"
+                yearg=int(year)+1
+                dayg=14-(31-int(day))
+            else:
+                monthg=month
+                yearg=year
+                dayg=gregd
+        else:
+            gregd=int(greg)+13
+            if int(gregd)>31:
+                monthg="01"
+                yearg=int(year)+1
+                dayg=13-(31-int(day))
+            else:
+                monthg=month
+                yearg=year
+                dayg=gregd
+    elif month in month31:
+        if float(year)>=2100:
+            gregd=int(day)+14
+            if int(gregd)>31:
+                monthg=int(month)+1
+                dayg=14-(31-int(day))
+                yearg=year
+            else:
+                monthg=month
+                dayg=gregd
+                yearg=year
+        else:
+            gregd=int(day)+13
+            if int(gregd)>31:
+                monthg=int(month)+1
+                dayg=13-(31-int(day))
+                yearg=year
+            else:
+                monthg=month
+                dayg=gregd
+                yearg=year
+    elif month in month30:
+        if float(year)>=2100:
+            gregd=int(day)+14
+            if int(gregd)>30:
+                monthg=int(month)+1
+                dayg=14-(30-int(day))
+                yearg=year
+            else:
+                monthg=month
+                dayg=gregd
+                yearg=year
+        else:
+            gregd=int(day)+13
+            if int(gregd)>30:
+                monthg=int(month)+1
+                dayg=13-(30-int(day))
+                yearg=year
+            else:
+                monthg=month
+                dayg=gregd
+                yearg=year
+    gregorian=str(dayg)+"."+str(monthg)+"."+str(yearg)
+    return gregorian
+
+
+def julian_cal(datelist):
+    """
+    takes a string of numerals in the julian calendar and outputs gregorian equivalent
     """
     day=datelist[0]
     month=datelist[1]
