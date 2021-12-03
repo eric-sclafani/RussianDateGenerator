@@ -327,7 +327,7 @@ def gregorian_cal(datelist):
                 yearg=year
                 dayg=gregd
         else:
-            gregd=int(greg)+13
+            gregd=int(gregd)+13
             if int(gregd)>31:
                 monthg="01"
                 yearg=int(year)+1
