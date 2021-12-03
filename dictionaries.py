@@ -11,7 +11,13 @@ def create_dict(csv_file:str, option:str)->dict:
         if option == "months":
             for row in reader:
                 the_dict[row[0]] = row[1]
+
+        if option == "english":
+            for row in reader:
+                the_dict[row[0]] = {"card": str(row[3]), "ord": str(row[4])}
+
     return the_dict
 
 num_dict = create_dict("RussianNumerals.csv", "numerals")
 month_dict = create_dict("RussianMonths.csv", "months")
+english_dict = create_dict("RussianNumerals.csv", "english")
