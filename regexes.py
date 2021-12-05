@@ -4,29 +4,38 @@ import re
 
 def parse_year(year: str) -> list:
     """
-
-    :param year:
-    :return:
+    deconstructs a numeral year into components to be translated into cyrillic
+    :param year: string year to be broken down
+    :return: list of year components
     """
-    if re.search(r"\d000?", year):
-        return num_dict[year]["ord"]
+    if re.search(r"^\d000?", year):
+        return num_dict[year]["ord"] # returns the cyrillic form straight from num_dict
 
     # break up the year into its components
+
+    # if year is length 4
     if len(year) == 4:
-        components = [year[0] + "000", year[1] + "00", year[2] + "0", year[3]]
+
+        # if last two digits are 11-19, gets pulled directly from num_dict instead of deconstructed
+        if re.search(r"1[1-9]$", year):
+            components = [year[0] + "000", year[1] + "00", year[2] + year[3]] # EX: 2011-2019
+        else:
+            components = [year[0] + "000", year[1] + "00", year[2] + "0", year[3]]
+
+    # if year is length 3
     else:
-        components = [year[0] + "00", year[1] + "0", year[2]]
+        if re.search(r"1[1-9]$", year):
+            components = [year[0] + "00", year[1] + year[2]]
+        else:
+            components = [year[0] + "00", year[1] + "0", year[2]]
 
     # filter out 0 numbers created by the above list to avoid key errors
     return [component for component in components if component not in ["000", "00", "0"]]
 
 def numeral_to_cyrillic(numeral:str, option)->str:
-    """
 
-    :param numeral:
-    :param option:
-    :return:
-    """
+    # docstrings to be added
+
     single_nums = ["01", "02", "03", "04", "05", "06", "07", "08", "09"]
     if numeral in single_nums:
         numeral = re.sub(r"0", "", numeral)
@@ -43,8 +52,11 @@ def numeral_to_cyrillic(numeral:str, option)->str:
     if option == "year":
         year = ""
         for component in parse_year(numeral):
+
             if not component.isnumeric():
+                # parse_year returns the cyrillic here instead of a list of numbers
                 return parse_year(numeral)
+
             if len(component) == 1:
                 year += num_dict[component]["ord"] + " "
             else:
