@@ -11,25 +11,25 @@ def get_input()->str:
     """
     return input(">>>").strip()
 
-def get_selection()->str:
+def display_options()->str:
     """
-    prompts user for input format selection
-    :return selection: user selection
+    displays options for the user
+    :return: None
     """
-    choices = [art1, art2, art3]
-    print(random.choice(choices))
-    while True:
-        print("""~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    print("""~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Select your date input format:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 |1| Russian numeric
 |2| Russian Cyrillic
 |3| English long form""")
-        selection = get_input()
-        if selection in ["1", "2", "3", "russian numeric", "russian cyrillic", "english long form"]:
-            return selection
-        else:
-            print(ERROR)
+
+def display_date(day:str, month:str, year:str):
+    """WIP"""
+    print(f"""
+DAY: {day}
+MONTH: {month}
+YEAR: {year}
+TRANSLITERATION: {transliterate_cyr(day + " " + month + " " + year)}""")
 
 # input validation differs depending on which option the user chose
 # probably split this function into seperate ones in the future
@@ -67,45 +67,70 @@ def validate_date(date:list)->bool:
                    int(month) > 12 or int(day) > 31 or \
                    int(month) == 2 and int(day) > 28:
         return False
-
     else:
         return True
 
-def process_selection(selection:str)->list:
+def process_selection(user_input:str)->list:
     """wont add docstrings yet since function will probably be split up"""
-    if selection in ["1", "russian numeric"]:
-        while True:
-            print("Please enter a Russian date in dd.mm.yyyy format.")
-            user_input = get_input()
+    if not re.search(r"(\d\d)\.(\d\d)\.(\d\d\d)", user_input):
+        print(ERROR)
+        return False
+    else:
+        split_date = user_input.split(".")
+        if not validate_date(split_date):
+            print(ERROR)
+            return False
+        else:
+            return split_date
 
-            if not re.search(r"(\d\d)\.(\d\d)\.(\d\d\d)", user_input):
-                print(ERROR)
-            else:
-                split_date = user_input.split(".")
-                if not validate_date(split_date):
-                    print(ERROR)
-                else:
-                    return split_date
-
-    if selection in ["2", "russian cyrillic"]:
-        raise NotImplementedError("Woops! Feature not implemented yet. Check back later!")
-
-    if selection in ["3", "english long form"]:
-        raise NotImplementedError("Woops! Feature not implemented yet. Check back later!")
 
 def main():
-    selection = get_selection()
-    date_list = process_selection(selection)
+    choices = [art1, art2, art3]
+    print(random.choice(choices))
 
-    day = decline_day(date_list[0])
-    month = decline_month(date_list[1])
-    year = decline_year(date_list[2])
+    while True:
+        display_options()
+        selection = get_input()
+        if selection in ["1", "2", "3", "russian numeric", "russian cyrillic", "english long form"]:
+            print("Type \" back\" to revisit the options menu.")
+            print("Type \" exit\" to exit the program.")
+            while True:
 
-    print(f"""
-DAY: {day}
-MONTH: {month}
-YEAR: {year}
-TRANSLITERATION: {transliterate_cyr(day + " " + month + " " + year)}""")
+                # user selects russian numeric date
+                if selection in ["1", "russian numeric"]:
+                        print("\nPlease enter a Russian date in dd.mm.yyyy format.\n")
+
+                        user_input = get_input()
+                        if user_input == "back":
+                            break
+
+                        elif user_input == "exit":
+                            exit()
+
+                        date_list = process_selection(user_input)
+                        if date_list:
+                            day = decline_day(date_list[0])
+                            month = decline_month(date_list[1])
+                            year = decline_year(date_list[2])
+                            display_date(day, month, year)
+
+
+                if selection in ["2", "russian cyrillic"]:
+                    raise NotImplementedError("Woops! Feature not implemented yet. Check back later!")
+
+                if selection in ["3", "english long form"]:
+                    raise NotImplementedError("Woops! Feature not implemented yet. Check back later!")
+
+
+
+        elif selection == "exit":
+            exit()
+        else:
+            print(ERROR)
+
+
+
+
 
 
 
