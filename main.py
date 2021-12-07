@@ -23,15 +23,20 @@ Select your date input format:
 |2| Russian Cyrillic
 |3| English long form""")
 
-def display_dates(day:str, month:str, year:str, date_list:list):
+def display_dates(option,day:str, month:str, year:str, date_list:list):
     """WIP"""
-    print(f"""
-{day} {month} {year}
-{transliterate_cyr(day + " " + month + " " + year)}
-\"{month_dict[date_list[1]]["eng"].title()} {english_nums_dict[date_list[0]]["ord"]}, {date_list[2]}\"""")
 
-# input validation differs depending on which option the user chose
-# probably split this function into seperate ones in the future
+
+    # INPUT OPTION 1 PRINTING
+    if option == "1":
+        print(f"""
+{day} {month} {year}
+{transliterate_cyr(day + " " + month + " " + year)}""") # prints cyrillic and transliteration
+
+        day = re.sub(r"^0", "",date_list[0])# removes 0's (01-09) from input to be looked up in dicts
+        month = re.sub(r"^0","",date_list[1])
+        print(f"""{month_dict[month]["eng"]} {english_nums_dict[day]["ord"]}, {date_list[2]}""") # prints English translation
+
 
 def validate_date(date:list)->bool:
     """
@@ -90,16 +95,19 @@ def main():
     while True:
         display_options()
         selection = get_input()
+        print("~" * 60)
+        print("Type \" back\" to revisit the options menu.")
+        print("Type \" exit\" to exit the program.")
+        print("~" * 60)
         if selection in ["1", "2", "3", "russian numeric", "russian cyrillic", "english long form"]:
-            print("Type \" back\" to revisit the options menu.")
-            print("Type \" exit\" to exit the program.")
+
             while True:
 
                 # user selects russian numeric date
                 if selection in ["1", "russian numeric"]:
                         print("\nPlease enter a Russian date in dd.mm.yyyy format.\n")
-
                         user_input = get_input()
+
                         if user_input == "back":
                             break
 
@@ -111,11 +119,20 @@ def main():
                             day = decline_day(date_list[0])
                             month = decline_month(date_list[1])
                             year = decline_year(date_list[2])
-                            display_dates(day, month, year, date_list)
+                            display_dates("1",day, month, year, date_list)
 
 
                 if selection in ["2", "russian cyrillic"]:
-                    raise NotImplementedError("Woops! Feature not implemented yet. Check back later!")
+                    print("\nPlease enter a date in Cyrillic\n")
+                    user_input = get_input()
+
+                    if user_input == "back":
+                        break
+
+                    elif user_input == "exit":
+                        exit()
+
+
 
                 if selection in ["3", "english long form"]:
                     raise NotImplementedError("Woops! Feature not implemented yet. Check back later!")
