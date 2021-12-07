@@ -76,6 +76,14 @@ def decline_day(day:str) -> str:
     day = re.sub(r"ой$", "ое", day)
     return day
 
+def undecline_day(day: str) -> str:
+    day = re.sub(r"третье$", "третий", day)
+    day = re.sub(r"шестое$", "шестой", day)
+    day = re.sub(r"рое$", "рой", day)
+    day = re.sub(r"ьмое", "ьмой", day)
+    day = re.sub(r"ое$", "ый", day)
+    return day
+    
 def decline_month(month:str) -> str:
     """
     declines Russian month from nomitive -> genitive case
@@ -86,6 +94,12 @@ def decline_month(month:str) -> str:
     month = re.sub(r"ь$", "я", month)
     month = re.sub(r"й$", "я", month)
     month = re.sub(r"т$", "та", month)
+    return month
+
+def undecline_month(month: str) -> str:
+    month = re.sub(r"мая$", "май", month)
+    month = re.sub(r"я$", "ь", month)
+    month = re.sub(r"та$", "т", month)
     return month
     
 def decline_year(year: str) -> str:
@@ -105,144 +119,87 @@ def decline_year(year: str) -> str:
     year= re.sub(r"год$", "года", year)
     return year
 
+def undecline_year(year: str) -> str:
+    year = re.sub(r"третьего$", "третий", year)
+    year = re.sub(r"шестого$", "шестой", year)
+    year = re.sub(r"рого$", "рой", year)
+    year = re.sub(r"ьмого$", "ьмой", year)
+    year = re.sub(r"ого$", "ый", year)
+    year = re.sub(r"года$", "", year)
+    return year
+
 def transliterate_cyr(translit):
     """
     this takes the Russian cyrillic and transliterates it into the Roman alphabet
     :param cyrillic: changes cyrillic letters to roman equivalents
     :return translit_rus: translitered russian form of string
     """
-    if re.search(r"А", translit):
-        translit=re.sub(r"А", "A", translit)
-    if re.search(r"а", translit):
-        translit=re.sub(r"а", "a", translit)
-    if re.search(r"Б", translit):
-        translit=re.sub(r"Б", "B", translit)
-    if re.search(r"б", translit):
-        translit=re.sub(r"б", "b", translit)
-    if re.search(r"В", translit):
-        translit=re.sub(r"В", "V", translit)
-    if re.search(r"в", translit):
-        translit=re.sub(r"в", "v", translit)
-    if re.search(r"Г", translit):
-        translit=re.sub(r"Г", "G", translit)
-    if re.search(r"г", translit):
-        translit=re.sub(r"г", "g", translit)
-    if re.search(r"Д", translit):
-        translit=re.sub(r"Д", "D", translit)
-    if re.search(r"д", translit):
-        translit=re.sub(r"д", "d", translit)
-    if re.search(r"Е", translit):
-        translit=re.sub(r"Е", "Je", translit)
-    if re.search(r"е", translit):
-        translit=re.sub(r"е", "je", translit)
-    if re.search(r"Ё", translit):
-        translit=re.sub(r"Ё", "Jo", translit)
-    if re.search(r"ё", translit):
-        translit=re.sub(r"ё", "jo", translit)
-    if re.search(r"Ж", translit):
-        translit=re.sub(r"Ж", "Zh", translit)
-    if re.search(r"ж", translit):
-        translit=re.sub(r"ж", "zh", translit)
-    if re.search(r"З", translit):
-        translit=re.sub(r"З", "Z", translit)
-    if re.search(r"з", translit):
-        translit=re.sub(r"з", "z", translit)
-    if re.search(r"И", translit):
-        translit=re.sub(r"И", "I", translit)
-    if re.search(r"и", translit):
-        translit=re.sub(r"и", "i", translit)
-    if re.search(r"Й", translit):
-        translit=re.sub(r"Й", "J", translit)
-    if re.search(r"й", translit):
-        translit=re.sub(r"й", "j", translit)
-    if re.search(r"К", translit):
-        translit=re.sub(r"К", "K", translit)
-    if re.search(r"к", translit):
-        translit=re.sub(r"к", "k", translit)
-    if re.search(r"Л", translit):
-        translit=re.sub(r"Л", "L", translit)
-    if re.search(r"л", translit):
-        translit=re.sub(r"л", "l", translit)
-    if re.search(r"М", translit):
-        translit=re.sub(r"М", "M", translit)
-    if re.search(r"м", translit):
-        translit=re.sub(r"м", "m", translit)
-    if re.search(r"Н", translit):
-        translit=re.sub(r"Н", "N", translit)
-    if re.search(r"н", translit):
-        translit=re.sub(r"н", "n", translit)
-    if re.search(r"О", translit):
-        translit=re.sub(r"О", "O", translit)
-    if re.search(r"о", translit):
-        translit=re.sub(r"о", "o", translit)
-    if re.search(r"П", translit):
-        translit=re.sub(r"П", "P", translit)
-    if re.search(r"п", translit):
-        translit=re.sub(r"п", "p", translit)
-    if re.search(r"Р", translit):
-        translit=re.sub(r"Р", "R", translit)
-    if re.search(r"р", translit):
-        translit=re.sub(r"р", "r", translit)
-    if re.search(r"C", translit):
-        translit=re.sub(r"C", "S", translit)
-    if re.search(r"с", translit):
-        translit=re.sub(r"с", "s", translit)
-    if re.search(r"Т", translit):
-        translit=re.sub(r"Т", "T", translit)
-    if re.search(r"т", translit):
-        translit=re.sub(r"т", "t", translit)
-    if re.search(r"У", translit):
-        translit=re.sub(r"У", "U", translit)
-    if re.search(r"у", translit):
-        translit=re.sub(r"у", "u", translit)
-    if re.search(r"Ф", translit):
-        translit=re.sub(r"Ф", "F", translit)
-    if re.search(r"ф", translit):
-        translit=re.sub(r"ф", "f", translit)
-    if re.search(r"Х", translit):
-        translit=re.sub(r"Х", "Kh", translit)
-    if re.search(r"х", translit):
-        translit=re.sub(r"х", "kh", translit)
-    if re.search(r"Ц", translit):
-        translit=re.sub(r"Ц", "Ts", translit)
-    if re.search(r"ц", translit):
-        translit=re.sub(r"ц", "ts", translit)
-    if re.search(r"Ч", translit):
-        translit=re.sub(r"Ч", "Ch", translit)
-    if re.search(r"ч", translit):
-        translit=re.sub(r"ч", "ch", translit)
-    if re.search(r"Ш", translit):
-        translit=re.sub(r"Ш", "Sh", translit)
-    if re.search(r"ш", translit):
-        translit=re.sub(r"ш", "sh", translit)
-    if re.search(r"Щ", translit):
-        translit=re.sub(r"Щ", "Shch", translit)
-    if re.search(r"щ", translit):
-        translit=re.sub(r"щ", "shch", translit)
-    if re.search(r"Ъ", translit):
-        translit=re.sub(r"Ъ", '"', translit)
-    if re.search(r"ъ", translit):
-        translit=re.sub(r"ъ", '"', translit)
-    if re.search(r"Ы", translit):
-        translit=re.sub(r"Ы", "Y", translit)
-    if re.search(r"ы", translit):
-        translit=re.sub(r"ы", "y", translit)
-    if re.search(r"Ь", translit):
-        translit=re.sub(r"Ь", "'", translit)
-    if re.search(r"ь", translit):
-        translit=re.sub(r"ь", "'", translit)
-    if re.search(r"Э", translit):
-        translit=re.sub(r"Э", "Eh", translit)
-    if re.search(r"э", translit):
-        translit=re.sub(r"э", "eh", translit)
-    if re.search(r"Ю", translit):
-        translit=re.sub(r"Ю", "Ju", translit)
-    if re.search(r"ю", translit):
-        translit=re.sub(r"ю", "ju", translit)
-    if re.search(r"Я", translit):
-        translit=re.sub(r"Я", "Ya", translit)
-    if re.search(r"я", translit):
-        translit=re.sub(r"я", "ya", translit)
+    translit=re.sub(r"А", "A", translit)
+    translit=re.sub(r"а", "a", translit)
+    translit=re.sub(r"Б", "B", translit)
+    translit=re.sub(r"б", "b", translit)
+    translit=re.sub(r"В", "V", translit)
+    translit=re.sub(r"в", "v", translit)
+    translit=re.sub(r"Г", "G", translit)
+    translit=re.sub(r"г", "g", translit)
+    translit=re.sub(r"Д", "D", translit)
+    translit=re.sub(r"д", "d", translit)
+    translit=re.sub(r"Е", "Je", translit)
+    translit=re.sub(r"е", "je", translit)
+    translit=re.sub(r"Ё", "Jo", translit)
+    translit=re.sub(r"ё", "jo", translit)
+    translit=re.sub(r"Ж", "Zh", translit)
+    translit=re.sub(r"ж", "zh", translit)
+    translit=re.sub(r"З", "Z", translit)
+    translit=re.sub(r"з", "z", translit)
+    translit=re.sub(r"И", "I", translit)
+    translit=re.sub(r"и", "i", translit)
+    translit=re.sub(r"Й", "J", translit)
+    translit=re.sub(r"й", "j", translit)
+    translit=re.sub(r"К", "K", translit)
+    translit=re.sub(r"к", "k", translit)
+    translit=re.sub(r"Л", "L", translit)
+    translit=re.sub(r"л", "l", translit)
+    translit=re.sub(r"М", "M", translit)
+    translit=re.sub(r"м", "m", translit)
+    translit=re.sub(r"Н", "N", translit)
+    translit=re.sub(r"н", "n", translit)
+    translit=re.sub(r"О", "O", translit)
+    translit=re.sub(r"о", "o", translit)
+    translit=re.sub(r"П", "P", translit)
+    translit=re.sub(r"п", "p", translit)
+    translit=re.sub(r"Р", "R", translit)
+    translit=re.sub(r"р", "r", translit)
+    translit=re.sub(r"C", "S", translit)
+    translit=re.sub(r"с", "s", translit)
+    translit=re.sub(r"Т", "T", translit)
+    translit=re.sub(r"т", "t", translit)
+    translit=re.sub(r"У", "U", translit)
+    translit=re.sub(r"у", "u", translit)
+    translit=re.sub(r"Ф", "F", translit)
+    translit=re.sub(r"ф", "f", translit)
+    translit=re.sub(r"Х", "Kh", translit)
+    translit=re.sub(r"х", "kh", translit)
+    translit=re.sub(r"Ц", "Ts", translit)
+    translit=re.sub(r"ц", "ts", translit)
+    translit=re.sub(r"Ч", "Ch", translit)
+    translit=re.sub(r"ч", "ch", translit)
+    translit=re.sub(r"Ш", "Sh", translit)
+    translit=re.sub(r"ш", "sh", translit)
+    translit=re.sub(r"Щ", "Shch", translit)
+    translit=re.sub(r"щ", "shch", translit)
+    translit=re.sub(r"Ъ", '"', translit)
+    translit=re.sub(r"ъ", '"', translit)
+    translit=re.sub(r"Ы", "Y", translit)
+    translit=re.sub(r"ы", "y", translit)
+    translit=re.sub(r"Ь", "'", translit)
+    translit=re.sub(r"ь", "'", translit)
+    translit=re.sub(r"Э", "Eh", translit)
+    translit=re.sub(r"э", "eh", translit)
+    translit=re.sub(r"Ю", "Ju", translit)
+    translit=re.sub(r"ю", "ju", translit)
+    translit=re.sub(r"Я", "Ya", translit)
+    translit=re.sub(r"я", "ya", translit)
     return translit
 
 def gregorian_cal(datelist):
@@ -393,151 +350,3 @@ def gregorian_cal(datelist):
     gregorian=str(dayg)+"."+str(monthg)+"."+str(yearg)
     return gregorian
 
-
-def julian_cal(datelist):
-    """
-    takes a string of numerals in the julian calendar and outputs gregorian equivalent
-    """
-    day=datelist[0]
-    month=datelist[1]
-    year=datelist[-1]
-    month31=["01", "03", "05", "07", "08", "10"]
-    month30=["09", "04", "06", "11"]
-    if month=="02":
-        if float(year)>=2100:
-            juld=int(day)+14
-            if float(year)%4 ==0:
-                if re.search("00$", year):
-                    if float(year)%400 ==0:
-                        if int(juld)>29:
-                            monthj=int(month)+1
-                            dayj=14-(29-int(day))
-                            yearj=year
-                        else:
-                            monthj=month
-                            dayj=juld
-                            yearj=year
-                    else:
-                        if int(juld)>28:
-                            monthj=int(month)+1
-                            dayj=14-(28-int(day))
-                            yearj=year
-                else:
-                    if int(juld)>29:
-                        monthj=int(month)+1
-                        dayj=14-(29-int(day))
-                        yearj=year
-                    else:
-                        monthj=month
-                        dayj=juld
-                        yearj=year
-            else:
-                if int(juld)>28:
-                    monthj=int(month)+1
-                    dayj=14-(28-int(day))
-                    yearj=year
-                else:
-                    monthj=month
-                    dayj=juld
-                    yearj=year
-        else:
-            juld=int(day)+13
-            if float(year)%4 ==0:
-                if re.search("00$", year):
-                    if float(year)%400 ==0:
-                        if int(juld)>29:
-                            monthj=int(month)+1
-                            dayj=13-(29-int(day))
-                            yearj=year
-                        else:
-                            monthj=month
-                            dayj=juld
-                            yearj=year
-                    else:
-                        if int(juld)>28:
-                            monthj=int(month)+1
-                            dayj=13-(28-int(day))
-                            yearj=year
-                else:
-                    if int(juld)>29:
-                        monthj=int(month)+1
-                        dayj=13-(29-int(day))
-                        yearj=year
-                    else:
-                        monthj=month
-                        dayj=juld
-                        yearj=year
-            else:
-                if int(juld)>28:
-                    monthj=int(month)+1
-                    dayj=13-(28-int(day))
-                    yearj=year
-                else:
-                    monthj=month
-                    dayj=juld
-                    yearj=year
-    elif month=="12":
-        if float(year)>=2100:
-            juld=int(day)+14
-            if int(juld)>31:
-                monthj="01"
-                yearj=int(year)+1
-                dayj=14-(31-int(day))
-            else:
-                monthj=month
-                yearj=year
-                dayj=juld
-        else:
-            juld=int(day)+13
-            if int(juld)>31:
-                monthj="01"
-                yearj=int(year)+1
-                dayj=13-(31-int(day))
-            else:
-                monthj=month
-                yearj=year
-                dayj=juld
-    elif month in month31:
-        if float(year)>=2100:
-            juld=int(day)+14
-            if int(juld)>31:
-                monthj=int(month)+1
-                dayj=14-(31-int(day))
-                yearj=year
-            else:
-                monthj=month
-                dayj=juld
-                yearj=year
-        else:
-            juld=int(day)+13
-            if int(juld)>31:
-                monthj=int(month)+1
-                dayj=13-(31-int(day))
-                yearj=year
-            else:
-                monthj=month
-                dayj=juld
-                yearj=year
-    elif month in month30:
-        if float(year)>=2100:
-            juld=int(day)+14
-            if int(juld)>30:
-                monthj=int(month)+1
-                dayj=14-(30-int(day))
-                yearj=year
-            else:
-                monthj=month
-                dayj=juld
-                yearj=year
-        else:
-            juld=int(day)+13
-            if int(juld)>30:
-                monthj=int(month)+1
-                dayj=13-(30-int(day))
-                yearj=year
-            else:
-                monthj=month
-                dayj=juld
-                yearj=year
-    julian=str(dayj)+"."+str(monthj)+"."+str(yearj)
-    return julian
