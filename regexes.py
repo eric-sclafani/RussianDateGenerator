@@ -77,11 +77,11 @@ def decline_day(day:str) -> str:
     return day
 
 def undecline_day(day: str) -> str:
-    day = re.sub(r"третье$", "третий", day)
-    day = re.sub(r"шестое$", "шестой", day)
-    day = re.sub(r"рое$", "рой", day)
+    day = re.sub(r"третье", "третий", day)
+    day = re.sub(r"шестое", "шестой", day)
+    day = re.sub(r"рое", "рой", day)
     day = re.sub(r"ьмое", "ьмой", day)
-    day = re.sub(r"ое$", "ый", day)
+    day = re.sub(r"ое", "ый", day)
     return day
     
 def decline_month(month:str) -> str:
@@ -97,9 +97,18 @@ def decline_month(month:str) -> str:
     return month
 
 def undecline_month(month: str) -> str:
-    month = re.sub(r"мая$", "май", month)
-    month = re.sub(r"я$", "ь", month)
-    month = re.sub(r"та$", "т", month)
+    month = re.sub(r"мая", "май", month)
+    month = re.sub(r"января", "январь", month)
+    month = re.sub(r"февраля", "февраль", month)
+    month = re.sub(r"марта", "март", month)
+    month = re.sub(r"апреля", "апрель", month)
+    month = re.sub(r"июня", "июнь", month)
+    month = re.sub(r"июля", "июль", month)
+    month = re.sub(r"августа", "август", month)
+    month = re.sub(r"сентября", "сентябрь", month)
+    month = re.sub(r"октября", "октябрь", month)
+    month = re.sub(r"ноября", "ноябрь", month)
+    month = re.sub(r"декабря", "декабрь", month)
     return month
     
 def decline_year(year: str) -> str:
@@ -120,13 +129,19 @@ def decline_year(year: str) -> str:
     return year
 
 def undecline_year(year: str) -> str:
-    year = re.sub(r"третьего$", "третий", year)
-    year = re.sub(r"шестого$", "шестой", year)
-    year = re.sub(r"рого$", "рой", year)
-    year = re.sub(r"ьмого$", "ьмой", year)
-    year = re.sub(r"ого$", "ый", year)
-    year = re.sub(r"года$", "", year)
+    year = re.sub(r"третьего", "третий", year)
+    year = re.sub(r"шестого", "шестой", year)
+    year = re.sub(r"рого", "рой", year)
+    year = re.sub(r"ьмого", "ьмой", year)
+    year = re.sub(r"ого", "ый", year)
+    year = re.sub(r"года", "", year)
     return year
+
+def undecline_cyrillic(date: str) -> str:
+    date = undecline_day(date)
+    date = undecline_month(date)
+    date = undecline_year(date)
+    return date.strip()
 
 def transliterate_cyr(translit):
     """
