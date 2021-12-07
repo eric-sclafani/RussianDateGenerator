@@ -23,13 +23,12 @@ Select your date input format:
 |2| Russian Cyrillic
 |3| English long form""")
 
-def display_date(day:str, month:str, year:str):
+def display_dates(day:str, month:str, year:str, date_list:list):
     """WIP"""
     print(f"""
-DAY: {day}
-MONTH: {month}
-YEAR: {year}
-TRANSLITERATION: {transliterate_cyr(day + " " + month + " " + year)}""")
+{day} {month} {year}
+{transliterate_cyr(day + " " + month + " " + year)}
+\"{month_dict[date_list[1]]["eng"].title()} {english_nums_dict[date_list[0]]["ord"]}, {date_list[2]}\"""")
 
 # input validation differs depending on which option the user chose
 # probably split this function into seperate ones in the future
@@ -112,7 +111,7 @@ def main():
                             day = decline_day(date_list[0])
                             month = decline_month(date_list[1])
                             year = decline_year(date_list[2])
-                            display_date(day, month, year)
+                            display_dates(day, month, year, date_list)
 
 
                 if selection in ["2", "russian cyrillic"]:
