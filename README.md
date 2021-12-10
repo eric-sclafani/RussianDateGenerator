@@ -8,3 +8,17 @@ Linguistics Report:
 
 
 	Russian months are nouns that can be declined into different cases much like adjectives. However, for the purposes of this project we are only concerned with the genitive case as it pertains to months and the Russian word for year "год." If an adjective ends in a consonant, then "-а" is appended onto the end. So, "год" becomes "года" in genitive singular. If a noun is masculine and ends in the soft sign "-ь" then the "-ь" is deleted and replaced with "-я". If a noun ends in "-й", then "-й" is deleted and replaced with "-я". Since all of the nouns that are used in this project are masculine and singular we do not need to be concerned with feminine, neuter or plural declensions for the genitive or any other case.
+
+
+10.03.2000
+десятое марта двухтысячного года
+
+четырнадцатое декабря тысяча девятьсот девяносто первого года
+
+тридцать первое апреля две тысячи четвёртого года
+
+двадцать девятое февраля две тысячи двадцатого года
+
+двадцать девятое февраля тысяча девятьсот девяносто первого года
+
+шестнадцатое октября две тысячи первого года
