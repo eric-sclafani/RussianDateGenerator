@@ -31,6 +31,20 @@ After validation, regular expression functions from `regexes.py` are applied and
 
 # Design decisions
 
+The regexes.py file contains all of the regular expressions we used in our project. The first function in the file is called parse_year(year). This function takes a numeral year string as the input and deconstructs it into components to be translated into Cyrillic. For example, if you inputed the year "1999", then the function would deconstruct it into ["1000", "900", "90", "9"]. The functions makes sure that if it detects any string of 0s that is in the list ["000", "00", "0"] that it does not include it in the output as there is no equivalent word in the Russian Cyrillic output. For example, if the input was "2000" then the output would be ["2000"] not ["2000", "000", "00", "0"]. It also takes into account the error that would occur if we followed this process with the numbers between 11-19. If the function detects a number in this range in the ending of the year, it makes sure to keep it as that in the list. For example, if the input was "2115", then the output is ["2000", "100", "15"] not ["2000", "1000", "10", "5"], as this would give the incorrect form of the date once it has been translated to Cyrillic.
+
+The next function in the file is the numeral_to_cyrillic(numeral, option) function. This function takes the 
+
+The decline_day(day) function takes a string that contains the Russian form of the day in nominative case as the input and outputs the day in prepositional case. This is done using re.sub. If the function detects "-ый" or "-ой" at the end of the string, then it replaces it with "-ое". This function also accounts for the irregular form of the ordinal form of three. If the function detects "третий" at the end of the string, it replaces it with the prepositional form of three, "третье". This function returns day.
+
+The underline_day(day) function is needed in the second option in the main file. When the user inputs the Cyrillic long form of the date it is in its proper form, declensions and all. Therefore, in order to retrieve the right thing from the CSVs, the input needs to be underlined. This function searches the day string for the adjective endings in prepositional case, and declines them back into nominative masculine singular. This function's regexes are a little more specified than the decline_day function because it has to account for how despite some numbers having the same ending in prepositional case, they are different in nominative case.
+
+The decline_month function works similarly to the decline day function. It takes the month string in nominative case as the input and outputs the month in genitive case. This is done through re.sub. If the function detects a specific ending, it will replace it with its corresponding genitive ending. For how these endings change, please refer to the linguistics section of the README.md file.
+
+The undecline_month function takes the Cyrillic input in its correct form, genitive case, and changes it back to nominative in order to find the month in its numeral form in the CSVs. Since most of the months have the same endings in genitive case, we decided that it was easiest to simply write a re.sub expression for each of the twelve months.
+
+The decline_year(year) function takes the year string in nominative case and outputs it in genitive case. It detects the adjective ending of the ordinal form of the last number in the year and replaces the nominative ending with genitive. For how this is done, please refer to the linguistics section of the README.md file. This function also adds the Russian word for year, "год" onto the end of the year string and declines "год" into genitive case by appending "-а" onto the end of it using an re.sub expression.
+
 
 
 # Linguistics
