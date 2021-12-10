@@ -45,6 +45,10 @@ The undecline_month function takes the Cyrillic input in its correct form, genit
 
 The decline_year(year) function takes the year string in nominative case and outputs it in genitive case. It detects the adjective ending of the ordinal form of the last number in the year and replaces the nominative ending with genitive. For how this is done, please refer to the linguistics section of the README.md file. This function also adds the Russian word for year, "год" onto the end of the year string and declines "год" into genitive case by appending "-а" onto the end of it using an re.sub expression.
 
+The underline_year(year) function takes the year in genitive case and outputs it in nominative case. Using regular expressions, the function detects the genitive masculine singular endings and replaces them with their nominative equivalents. Because the genitive masculine singular ending is the same for different nominative masculine singular endings, the regular expressions had to be a little more specific than their decline_year function equivalents. Therefore, more regular expressions were written to account for the correct forms needed. This function also uses regular expressions to replace the genitive form of year "года" with an empty string as it is no longer needed.
+
+The undecline_cyrillic(date) function
+
 
 
 # Linguistics
