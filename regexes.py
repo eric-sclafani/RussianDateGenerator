@@ -9,7 +9,7 @@ def parse_year(year: str) -> list:
     :return: list of year components
     """
     if re.search(r"^\d000?", year):
-        return num_dict[year]["ord"] # returns the cyrillic form straight from num_dict
+        return num_to_cyrillic_dict[year]["ord"] # returns the cyrillic form straight from num_dict
 
     # break up the year into its components
 
@@ -42,11 +42,11 @@ def numeral_to_cyrillic(numeral:str, option)->str:
 
     # day processing
     if option == "day":
-        return re.sub(rf"{numeral}", num_dict[numeral]["ord"], numeral)
+        return re.sub(rf"{numeral}", num_to_cyrillic_dict[numeral]["ord"], numeral)
 
     # month processing
     if option == "month":
-        return re.sub(rf"{numeral}", month_dict[numeral]["cyr"], numeral)
+        return re.sub(rf"{numeral}", num_to_month_dict[numeral]["cyr"], numeral)
 
     # year processing
     if option == "year":
@@ -58,9 +58,9 @@ def numeral_to_cyrillic(numeral:str, option)->str:
                 return parse_year(numeral)
 
             if len(component) == 1:
-                year += num_dict[component]["ord"] + " "
+                year += num_to_cyrillic_dict[component]["ord"] + " "
             else:
-                year += num_dict[component]["card"] + " "
+                year += num_to_cyrillic_dict[component]["card"] + " "
 
         return year.strip()
 
@@ -70,7 +70,8 @@ def decline_day(day:str) -> str:
     :param day: last number in date string to be declined
     :return day: day in prepositional case
     """
-    day = numeral_to_cyrillic(day, "day")
+    if day.isnumeric():
+        day = numeral_to_cyrillic(day, "day")
     day = re.sub(r"третий$", "третье", day)
     day = re.sub(r"ый$", "ое", day)
     day = re.sub(r"ой$", "ое", day)
@@ -90,7 +91,11 @@ def decline_month(month:str) -> str:
     :param month: month to be declined
     :return month: month in genitive case
     """
-    month = numeral_to_cyrillic(month, "month")
+
+    # needed for decline month to work with input option 3
+    if month.isnumeric():
+        month = numeral_to_cyrillic(month, "month")
+
     month = re.sub(r"ь$", "я", month)
     month = re.sub(r"й$", "я", month)
     month = re.sub(r"т$", "та", month)
@@ -117,9 +122,8 @@ def decline_year(year: str) -> str:
     :param year: last number in year string to be declined
     :return year: year in genitive case
     """
-
-    year = numeral_to_cyrillic(year, "year")
-
+    if year.isnumeric():
+        year = numeral_to_cyrillic(year, "year")
     year = re.sub(r"третий$", "третьего", year)
     year = re.sub(r"ый$", "ого", year)
     year = re.sub(r"ой$", "ого", year)
@@ -146,7 +150,7 @@ def undecline_cyrillic(date: str) -> str:
 def transliterate_cyr(translit):
     """
     this takes the Russian cyrillic and transliterates it into the Roman alphabet
-    :param cyrillic: changes cyrillic letters to roman equivalents
+    :param translit: changes cyrillic letters to roman equivalents
     :return translit_rus: translitered russian form of string
     """
     translit=re.sub(r"А", "A", translit)
