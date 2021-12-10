@@ -23,7 +23,8 @@ Select your date input format:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 |1| Russian numeric
 |2| Russian Cyrillic
-|3| English long form""")
+|3| English long form
+|4| Julian to Gregorian Calendar""")
 
 
 
