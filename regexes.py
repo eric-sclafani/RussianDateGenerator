@@ -239,7 +239,9 @@ def transliterate_cyr(translit):
 
 def gregorian_cal(datelist):
     """
-    takes a string of numerals in the julian calendar and outputs gregorian equivalent
+    takes a list of numerals corresponding to a date in the julian calendar and outputs gregorian equivalent
+    :param datelist: takes a date in julian calendar and adds 13 or 14 days onto it to get correct gregorian equivalent
+    :return datelist: list of numerals corresponding to a date in the gregorian calendar
     """
     day=datelist[0]
     month=datelist[1]

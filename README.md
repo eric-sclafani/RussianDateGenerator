@@ -47,7 +47,11 @@ The decline_year(year) function takes the year string in nominative case and out
 
 The underline_year(year) function takes the year in genitive case and outputs it in nominative case. Using regular expressions, the function detects the genitive masculine singular endings and replaces them with their nominative equivalents. Because the genitive masculine singular ending is the same for different nominative masculine singular endings, the regular expressions had to be a little more specific than their decline_year function equivalents. Therefore, more regular expressions were written to account for the correct forms needed. This function also uses regular expressions to replace the genitive form of year "года" with an empty string as it is no longer needed.
 
-The undecline_cyrillic(date) function
+The undecline_cyrillic(date) function takes the correct form of a Russian date in Cyrillic and returns the date with all of its parts in nominative case, this is needed for option 2 in main. The function calls on the undecline_day, undecline_month, and undecline_year functions and returns a stripped version of the string once it has finished.
+
+The transliterate_cyr function takes the correct form of a Russian cyrillic date and transliterates it into the Roman alphabet. This is done through a long serious of re.sub expressions. Every time the function detects an instance of a specified Russian character, it replaces it with its specified roman equivalent. This function contains regexes for the entire Russian alphabet, for both upper and lower cases. The function returns the transliterated version of the Russian cyrillic input.
+
+The gregorian_cal function takes a list
 
 
 
