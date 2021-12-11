@@ -12,7 +12,6 @@ def get_input()->str:
     return input(">>> ").strip()
 
 
-
 def display_options()-> None:
     """
     displays options for the user
@@ -24,7 +23,6 @@ Select your date input format:
 |1| Russian numeric
 |2| Russian Cyrillic
 |3| English long form""")
-
 
 
 def display_dates(option,date_list:list, day="", month="", year=""):
@@ -54,14 +52,15 @@ def display_dates(option,date_list:list, day="", month="", year=""):
     if option == "2":
 
         print("~" * 60)
+
         # print transliteration
         print(transliterate_cyr(date_list[-1]))
 
         # print english
-        print(f"""{cyrillic_to_month[date_list[1]]["eng"]} {cyrillic_to_cardinalday[date_list[0]]}, {cyrillic_to_num[date_list[2]]}""")
+
 
         # prints numeral form
-        print(f"""{cyrillic_to_num[date_list[0]]}.{cyrillic_to_month[date_list[1]]["num"]}.{cyrillic_to_num[date_list[2]]}""")
+
         print("~" * 60)
 
 # INPUT OPTION 3 PRINTING~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -159,26 +158,33 @@ def process_selection(user_input:str, option:str)->list:
 
         components = user_input.split()
 
-        try:
-            date = ""
-            for component in components:
-                if component in decl_cyrillic_months:
-                    month = component
 
-                    # splits the day and year to allow each to have one or two parts.
-                    date = list(map(lambda x: x.strip(), re.split(rf"{month}", user_input)))
-                    date.insert(1, month)
-                    break
+        date = ""
+        for component in components:
+            if component in decl_cyrillic_months:
+                month = component
 
-            # undeclines each date segment to be looked up in the dicts
-            undeclined_date = [undecline_cyrillic(element) for element in date]
+                # splits the day and year to allow each to have one or two parts.
+                date = list(map(lambda x: x.strip(), re.split(rf"{month}", user_input)))
+                date.insert(1, month)
+                break
 
-        except LookupError:
-            print(ERROR)
-            return False
+        # undeclines each date segment to be looked up in the dicts
+        undeclined_date = [undecline_cyrillic(element) for element in date]
 
-        else:
-            return undeclined_date
+
+
+    
+
+        # except LookupError:
+        #     pass
+            # print(ERROR)
+            # return False
+
+        # else:
+        #     return undeclined_date
+
+
 
 # INPUT OPTION 3 PROCESSING~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     elif option == "3":
@@ -197,7 +203,6 @@ def process_selection(user_input:str, option:str)->list:
             year = numeral_to_cyrillic(date[2], "year")
             cyrillic_date = [day, month, year]
 
-
             numeral_date = [cardnums[date[1]]["num"], english_months[date[0]]["num"], date[2]]
 
             if not validate_numeral_input(numeral_date):
@@ -211,6 +216,9 @@ def process_selection(user_input:str, option:str)->list:
         else:
             cyrillic_date.append(date[2])
             return cyrillic_date
+
+
+process_selection("шестнадцатое октября две тысячи первого года", "2")
 
 
 def main():
@@ -264,7 +272,12 @@ def main():
 
                         # direct user input must be included in list so it can be transliterated
                         date_list.insert(-1, user_input)
-                        display_dates("2", date_list)
+
+
+
+
+
+
 
 # USER SELECTS INPUT OPTION 3~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -290,17 +303,27 @@ def main():
 
 
 
+
+
         elif selection == "exit":
             exit()
         else:
             print(ERROR)
 
+# testing (declined)
+
+# десятое марта двухтысячного года
+#
+# четырнадцатое декабря тысяча девятьсот девяносто первого года
+#
+# тридцать первое апреля две тысячи четвёртого года
+#
+# двадцать девятое февраля две тысячи двадцатого года
+#
+# двадцать девятое февраля тысяча девятьсот девяносто первого года
+#
+# шестнадцатое октября две тысячи первого года
 
 
-
-
-
-
-
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

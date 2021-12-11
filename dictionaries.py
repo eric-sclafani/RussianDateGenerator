@@ -1,6 +1,12 @@
 import csv
 
 def create_dict(csv_file:str, option:str)->dict:
+    """
+    creates a dictionary based on specified csv file and whatever type of dictionary is needed
+    :param csv_file: file to extract data from
+    :param option: what type of key:value pairs are needed.
+    :return: dictionary with specified key:value pairs from information taken from specified csv
+    """
     the_dict = {}
     with open(csv_file, "r") as fin:
         reader = csv.reader(fin)
@@ -28,9 +34,9 @@ def create_dict(csv_file:str, option:str)->dict:
             for row in reader:
                 the_dict[row[1]] = {"eng": row[2], "num": row[0]}
 
-        elif option == "cyrillic_numyear":
+        elif option == "cyrillic_nums":
             for row in reader:
-                the_dict[row[2]] = row[0]
+                the_dict[row[2]] = {"num":row[0], "card": row[4]}
 
         elif option == "englishmonths":
             for row in reader:
@@ -50,7 +56,7 @@ english_nums_dict = create_dict("RussianNumerals.csv", "english_nums")
 # used in input option 2
 cyrillic_to_cardinalday = create_dict("RussianNumerals.csv", "cyrillic_days")
 cyrillic_to_month = create_dict("RussianMonths.csv", "cyrillic_months")
-cyrillic_to_num = create_dict("RussianNumerals.csv", "cyrillic_numyear")
+cyrillic_to_num = create_dict("RussianNumerals.csv", "cyrillic_nums")
 
 # used in input option 3
 english_months = create_dict("RussianMonths.csv", "englishmonths")
