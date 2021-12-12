@@ -22,11 +22,20 @@ Select your date input format:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 |1| Russian numeric
 |2| Russian Cyrillic
-|3| English long form""")
+|3| English long form
+|4| Julian to Gregorian Calendar""")
 
 
-def display_dates(option,date_list:list, day="", month="", year=""):
-
+def display_dates(option,date_list:list, day="", month="", year="")-> None:
+    """
+    displays the dates depending on which input option the user chose
+    :param option: which code block to execute
+    :param date_list: numeral date in list form ([day, month, year]) for easy dictionary look up
+    :param day: Cyrillic day
+    :param month: Cyrillic month
+    :param year: Cyrillic year
+    :return: None
+    """
 
 # INPUT OPTION 1 PRINTING~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -43,7 +52,7 @@ def display_dates(option,date_list:list, day="", month="", year=""):
         day = re.sub(r"^0", "",date_list[0])
         month = re.sub(r"^0","",date_list[1])
 
-        # prints English translation
+        # prints English translation by looking it up in a dictionary
         print(f"""{num_to_month_dict[month]["eng"]} {english_nums_dict[day]["ord"]}, {date_list[2]}""")
         print("~" * 60)
 
@@ -53,13 +62,7 @@ def display_dates(option,date_list:list, day="", month="", year=""):
 
         print("~" * 60)
 
-        # print transliteration
-        print(transliterate_cyr(date_list[-1]))
-
-        # print english
-
-
-        # prints numeral form
+        print("Unfortunately, this feature has not been implemented. Refer to the README.md for more details! Type \"back\" to view the other options.")
 
         print("~" * 60)
 
@@ -75,18 +78,29 @@ def display_dates(option,date_list:list, day="", month="", year=""):
         # print transliteration
         print(transliterate_cyr(day + " " + month + " " + year))
 
-        # numeral form
+        # prints numeral form looked up from a dictionary
         print(f"""{cyrillic_to_num[date_list[0]]}.{cyrillic_to_month[date_list[1]]["num"]}.{date_list[-1]}""")
         print("~" * 60)
 
+
+# INPUT OPTION 4 PRINTING~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+
+
+
 def validate_numeral_input(date:list)->bool:
     """
-    validates day and month with three checks:
+    validates day and month with multiple checks:
          1. months that end on the 30th
-         2. feb 28th edgecase
-         3. general date checks (month <= 12, day <= 31)
+         2. valid leap years
+         3. feb 28th edgecase
+         4. general date checks (month <= 12, day <= 31)
     :param date: date to be evaluated
-    :return: True if date is valid False otherwiseprint("~" * 60)
+    :return: True if date is valid False otherwise
     """
     day,month,year = date[0], date[1], date[2]
     month_exceptions = ["04", "4", "06", "6", "09", "9", "11"]
@@ -115,22 +129,15 @@ def validate_numeral_input(date:list)->bool:
     else:
         return True
 
-def validate_cyrillic_input(date: list) -> bool:
-    day, month, year = date[0], date[1], date[2]
-
-    # validation based on if the tokenized cyrillic forms are in the dicts
-    # all three conditions must be met
-    if day not in cyrillic_to_cardinalday:
-        return False
-
-    if month not in cyrillic_to_month:
-        return False
-
-    else:
-        return True
-
 def process_selection(user_input:str, option:str)->list:
-
+    """
+    processes the user input by validating it and making dictonary look ups when needed.
+    :param user_input: direct user input to help with printing some forms
+    :param option: which code block to execute
+    :return: OPTION 1 = returns the numeral date in [day, month, year] format
+             OPTION 2 = None
+             OPTION 3 = returns the date in Cyrillic form in [day, month, year] format
+    """
 
 # INPUT OPTION 1 PROCESSING~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     if option == "1":
@@ -172,18 +179,7 @@ def process_selection(user_input:str, option:str)->list:
         # undeclines each date segment to be looked up in the dicts
         undeclined_date = [undecline_cyrillic(element) for element in date]
 
-
-
-    
-
-        # except LookupError:
-        #     pass
-            # print(ERROR)
-            # return False
-
-        # else:
-        #     return undeclined_date
-
+        # deprecated
 
 
 # INPUT OPTION 3 PROCESSING~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -192,12 +188,13 @@ def process_selection(user_input:str, option:str)->list:
         # deletes comma in input and tokenizes english input. EX: ["December", "10th", "2021"]
         date = list(map(lambda x: re.sub(r",", "", x), user_input.split()))
 
+        # check to make sure no letters are in the year
         if not date[-1].isnumeric():
             print(ERROR)
             return False
 
         try:
-            #translates into cyrillic
+            #translates into Cyrillic by pulling the Cyrillic from a dictionary given the cardinal number, and English month. Year is processed differently.
             day = cardnums[date[1]]["cyr"]
             month = english_months[date[0]]["cyr"]
             year = numeral_to_cyrillic(date[2], "year")
@@ -205,20 +202,20 @@ def process_selection(user_input:str, option:str)->list:
 
             numeral_date = [cardnums[date[1]]["num"], english_months[date[0]]["num"], date[2]]
 
+            # validates the date
             if not validate_numeral_input(numeral_date):
                 print(ERROR)
                 return False
 
+        # to catch any input error not caught by the previous checks
         except LookupError:
             print(ERROR)
             return False
 
         else:
-            cyrillic_date.append(date[2])
+            cyrillic_date.append(date[2]) # appends the numeral year for easy printing
             return cyrillic_date
 
-
-process_selection("шестнадцатое октября две тысячи первого года", "2")
 
 
 def main():
@@ -249,6 +246,8 @@ def main():
                         exit()
 
                     date_list = process_selection(user_input, "1")
+
+                    # if validation is successful, declines the Cyrillic form and ships it for printing
                     if date_list:
                         day = decline_day(date_list[0])
                         month = decline_month(date_list[1])
@@ -267,17 +266,7 @@ def main():
                     elif user_input == "exit":
                         exit()
 
-                    date_list = process_selection(user_input, "2")
-                    if date_list:
-
-                        # direct user input must be included in list so it can be transliterated
-                        date_list.insert(-1, user_input)
-
-
-
-
-
-
+                    display_dates("2", [])
 
 # USER SELECTS INPUT OPTION 3~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -301,6 +290,7 @@ def main():
 
                         display_dates("3", date_list, day, month, year)
 
+# USER SELECTS INPUT OPTION 4~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 
@@ -310,20 +300,5 @@ def main():
         else:
             print(ERROR)
 
-# testing (declined)
-
-# десятое марта двухтысячного года
-#
-# четырнадцатое декабря тысяча девятьсот девяносто первого года
-#
-# тридцать первое апреля две тысячи четвёртого года
-#
-# двадцать девятое февраля две тысячи двадцатого года
-#
-# двадцать девятое февраля тысяча девятьсот девяносто первого года
-#
-# шестнадцатое октября две тысячи первого года
-
-
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
