@@ -23,10 +23,10 @@ Select your date input format:
 |1| Russian numeric
 |2| Russian Cyrillic
 |3| English long form
-|4| Julian to Gregorian Calendar""")
+|4| Julian to Gregorian calendar""")
 
 
-def display_dates(option,date_list:list, day="", month="", year="")-> None:
+def display_dates(option, date_list, day="", month="", year="")-> None:
     """
     displays the dates depending on which input option the user chose
     :param option: which code block to execute
@@ -81,16 +81,6 @@ def display_dates(option,date_list:list, day="", month="", year="")-> None:
         # prints numeral form looked up from a dictionary
         print(f"""{cyrillic_to_num[date_list[0]]}.{cyrillic_to_month[date_list[1]]["num"]}.{date_list[-1]}""")
         print("~" * 60)
-
-
-# INPUT OPTION 4 PRINTING~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-
-
-
-
-
 
 def validate_numeral_input(date:list)->bool:
     """
@@ -225,7 +215,7 @@ def main():
         display_options()
         selection = get_input()
 
-        if selection in ["1", "2", "3", "russian numeric", "russian cyrillic", "english long form", "cyr", "eng", "num"]:
+        if selection in ["1", "2", "3", "4", "jul", "greg", "cal", "russian numeric", "russian cyrillic", "english long form", "cyr", "eng", "num"]:
             print("~" * 60)
             print("Type \" back\" to revisit the options menu.")
             print("Type \" exit\" to exit the program.")
@@ -292,8 +282,24 @@ def main():
 
 # USER SELECTS INPUT OPTION 4~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+                if selection in ["4", "julian", "cal"]:
+                    print("\nPlease enter a Russian date in dd.mm.yyyy format.\n")
+                    user_input = get_input()
 
+                    if user_input == "back":
+                        break
 
+                    elif user_input == "exit":
+                        exit()
+
+                    date_list = process_selection(user_input, "1")
+
+                    if date_list:
+                        print("~" * 60)
+
+                        print(f"\nDATE IN THE JULIAN CALENDAR: {gregorian_cal(date_list)}\n")
+
+                        print("~" * 60)
 
         elif selection == "exit":
             exit()
